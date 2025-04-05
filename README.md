@@ -1,25 +1,3 @@
-Aqui está a estrutura completa para seu repositório GitHub com instruções detalhadas para iOS:
-
-### Estrutura do Repositório:
-```
-ConversorTTS-iOS/
-├── TTS_IPHONE_03.py
-├── requirements.txt
-├── README.md
-└── Exemplo.txt
-```
-
-### 1. Arquivo `requirements.txt`:
-```txt
-edge-tts==6.1.3
-PyPDF2==3.0.1
-chardet==5.2.0
-num2words==0.5.13
-aioconsole==0.6.1
-```
-
-### 2. Arquivo `README.md`:
-```markdown
 # Conversor de Texto para Voz para iPhone 📲🔊
 
 Conversor otimizado para iOS que transforma arquivos TXT/PDF em áudio MP3 usando o terminal a-Shell.
@@ -84,23 +62,6 @@ R: Digite `sair` durante qualquer operação
 
 ## 📄 Licença
 MIT License - Livre para uso e modificação
-```
-
-### 3. Arquivo `Exemplo.txt` (opcional):
-```
-Este é um arquivo de exemplo para teste. 
-O conversor TTS irá transformar este texto em um arquivo de áudio.
-```
-
-### Para Publicar:
-1. Crie o repositório no GitHub
-2. Adicione os arquivos via interface web ou:
-```bash
-git init
-git add .
-git commit -m "Primeira versão do conversor TTS para iOS"
-git remote add origin https://github.com/JonJonesBR/ConversorTTS-iOS.git
-git push -u origin main
 ```
 
 ### Link de Download Direto para Usuários:
