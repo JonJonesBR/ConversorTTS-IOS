@@ -2,8 +2,6 @@
 
 Conversor otimizado para iOS que transforma arquivos TXT/PDF em áudio MP3 usando o terminal a-Shell.
 
-![Demonstração](https://via.placeholder.com/800x400.png?text=Demo+do+Conversor+TTS)
-
 ## 📋 Pré-requisitos
 - iPhone/iPad com iOS 15+
 - Aplicativo [a-Shell](https://apps.apple.com/br/app/a-shell/id1543537943)
