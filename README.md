@@ -11,7 +11,6 @@ Conversor otimizado para iOS que transforma arquivos TXT/PDF em áudio MP3 usand
 
 ### 1. Preparação Inicial
 1. Abra o a-Shell
-2. Toque no ícone ⚙️ > Advanced > Enable File Access > Permitir
 
 ### 2. Clonar Repositório
 ```bash
