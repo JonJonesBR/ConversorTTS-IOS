@@ -12,10 +12,11 @@ Conversor otimizado para iOS que transforma arquivos TXT/PDF em áudio MP3 usand
 ### 1. Preparação Inicial
 1. Abra o a-Shell
 
-### 2. Clonar Repositório
-```bash
-git clone https://github.com/JonJonesBR/ConversorTTS-iOS.git
-cd ConversorTTS-iOS
+### 2. Baixar e Extrair:  
+   ```bash
+   curl -LO https://github.com/JonJonesBR/ConversorTTS-iOS/archive/refs/heads/main.zip
+   unzip main.zip
+   cd ConversorTTS-iOS-main
 ```
 
 ### 3. Instalar Dependências
