@@ -8,7 +8,7 @@ import chardet
 from num2words import num2words
 import edge_tts
 import sys
-import aioconsole  # Adicionado
+import aioconsole
 
 # ================== CONFIGURAÇÕES GLOBAIS ==================
 VOZ_PADRAO = 'pt-BR-ThalitaNeural'
@@ -18,6 +18,7 @@ VOZES = [
     ('3. pt-BR-FranciscaNeural', 'pt-BR-FranciscaNeural')
 ]
 CANCELAR_PROCESSAMENTO = False
+MAX_TENTATIVAS = 3  # Número máximo de tentativas por chunk
 
 def clear_screen():
     os.system('clear')
@@ -30,7 +31,7 @@ def check_and_install_dependencies():
         "edge_tts": "edge-tts",
         "chardet": "chardet",
         "num2words": "num2words",
-        "aioconsole": "aioconsole"  # Adicionado
+        "aioconsole": "aioconsole"
     }
     for module_name, package_name in dependencies.items():
         try:
@@ -190,6 +191,10 @@ def ler_arquivo_texto(caminho_arquivo: str) -> str:
         return ""
 
 def processar_texto(texto: str) -> str:
+    # Remover caracteres não imprimíveis
+    texto = re.sub(r'[\x00-\x1F\x7F-\x9F]', '', texto)
+    texto = texto.encode('utf-8', 'ignore').decode('utf-8')
+    
     texto = re.sub(r'\s+', ' ', texto)
     abreviacoes = {
         r'\bDr\.\b': 'Doutor',
@@ -256,11 +261,25 @@ def dividir_texto(texto: str) -> list:
 
 async def converter_texto_para_audio(texto: str, voz: str, caminho_saida: str) -> bool:
     try:
+        if not texto.strip():
+            print("⚠️ Texto vazio detectado")
+            return False
+            
         communicate = edge_tts.Communicate(texto, voz)
         await communicate.save(caminho_saida)
-        return True
+        
+        # Verifica se o arquivo foi criado e tem tamanho mínimo
+        if os.path.exists(caminho_saida) and os.path.getsize(caminho_saida) > 1024:
+            return True
+        else:
+            print("⚠️ Arquivo de áudio vazio ou muito pequeno")
+            if os.path.exists(caminho_saida):
+                os.remove(caminho_saida)
+            return False
     except Exception as e:
         print(f"\n❌ Erro na conversão: {str(e)}")
+        if os.path.exists(caminho_saida):
+            os.remove(caminho_saida)
         return False
 
 # ================== FUNÇÃO PARA CONVERTER PDF PARA TXT ==================
@@ -318,7 +337,7 @@ async def menu_principal():
         print("4. Sair")
         
         try:
-            raw_escolha = await aioconsole.ainput("Escolha uma opção: ")  # Modificado
+            raw_escolha = await aioconsole.ainput("Escolha uma opção: ")
             escolha = raw_escolha.strip()
             
             if escolha in ['1', '2', '3', '4']:
@@ -338,7 +357,7 @@ async def menu_vozes():
     
     while True:
         try:
-            raw_escolha = await aioconsole.ainput("Escolha a opção desejada (1-3): ")  # Modificado
+            raw_escolha = await aioconsole.ainput("Escolha a opção desejada (1-3): ")
             escolha = raw_escolha.strip()
             
             if escolha.isdigit():
@@ -372,7 +391,7 @@ async def exibir_ajuda():
     print("- Digite 'sair' durante qualquer operação para cancelar")
     print("- Chunks são divididos após pontos finais para melhor fluidez")
     print("- Thalita Neural é a voz padrão recomendada")
-    await aioconsole.ainput("\nPressione ENTER para continuar...")  # Modificado
+    await aioconsole.ainput("\nPressione ENTER para continuar...")
 
 async def selecionar_arquivo() -> str:
     dir_atual = os.path.expanduser('~/Documents')
@@ -395,21 +414,21 @@ async def selecionar_arquivo() -> str:
         print("V. Voltar")
         
         try:
-            escolha = (await aioconsole.ainput("\nEscolha uma opção: ")).strip().upper()  # Modificado
+            escolha = (await aioconsole.ainput("\nEscolha uma opção: ")).strip().upper()
         except asyncio.TimeoutError:
             return ''
         
         if escolha == 'V':
             return ''
         elif escolha == 'D':
-            novo_dir = await aioconsole.ainput("\n📁 Digite o caminho do novo diretório: ")  # Modificado
+            novo_dir = await aioconsole.ainput("\n📁 Digite o caminho do novo diretório: ")
             if os.path.isdir(novo_dir):
                 dir_atual = novo_dir
             else:
                 print("\n❌ Diretório inválido")
                 await asyncio.sleep(1)
         elif escolha == 'M':
-            caminho = await aioconsole.ainput("\n⌨️ Digite o caminho completo do arquivo: ")  # Modificado
+            caminho = await aioconsole.ainput("\n⌨️ Digite o caminho completo do arquivo: ")
             if not os.path.exists(caminho):
                 print("\n❌ Arquivo não encontrado")
                 await asyncio.sleep(1)
@@ -424,13 +443,13 @@ async def selecionar_arquivo() -> str:
                     continue
                 caminho_txt = verificar_e_corrigir_arquivo(caminho_txt)
                 
-                editar = await aioconsole.ainput("\n✏️ Editar arquivo corrigido? (s/n): ")  # Modificado
+                editar = await aioconsole.ainput("\n✏️ Editar arquivo corrigido? (s/n): ")
                 editar = editar.strip().lower()
                 
                 if editar == 's':
                     try:
                         subprocess.Popen(["open", caminho_txt] if detectar_sistema().get('macos') else ["xdg-open", caminho_txt])
-                        await aioconsole.ainput("\n💡 Salve as alterações e pressione ENTER...")  # Modificado
+                        await aioconsole.ainput("\n💡 Salve as alterações e pressione ENTER...")
                     except:
                         print("\n⚠️ Não foi possível abrir o editor")
                 return caminho_txt
@@ -456,13 +475,13 @@ async def selecionar_arquivo() -> str:
                         continue
                     caminho_txt = verificar_e_corrigir_arquivo(caminho_txt)
                     
-                    editar = await aioconsole.ainput("\n✏️ Editar arquivo corrigido? (s/n): ")  # Modificado
+                    editar = await aioconsole.ainput("\n✏️ Editar arquivo corrigido? (s/n): ")
                     editar = editar.strip().lower()
                     
                     if editar == 's':
                         try:
                             subprocess.Popen(["open", caminho_txt] if detectar_sistema().get('macos') else ["xdg-open", caminho_txt])
-                            await aioconsole.ainput("\n💡 Salve as alterações e pressione ENTER...")  # Modificado
+                            await aioconsole.ainput("\n💡 Salve as alterações e pressione ENTER...")
                         except:
                             print("\n⚠️ Não foi possível abrir o editor")
                     return caminho_txt
@@ -512,7 +531,7 @@ async def iniciar_conversao() -> None:
         
         temp_files = []
         start_time = time.time()
-        semaphore = asyncio.Semaphore(5)
+        semaphore = asyncio.Semaphore(5)  # Limite de 5 tarefas simultâneas
         
         async def processar_chunk(i, parte):
             async with semaphore:
@@ -522,19 +541,33 @@ async def iniciar_conversao() -> None:
                 saida_temp = os.path.join(diretorio_saida, f"{nome_base}_temp_{i:03d}.mp3")
                 temp_files.append(saida_temp)
                 
-                inicio_chunk = time.time()
-                sucesso = await converter_texto_para_audio(parte, voz_escolhida, saida_temp)
+                tentativa = 1
+                while tentativa <= MAX_TENTATIVAS:
+                    if CANCELAR_PROCESSAMENTO:
+                        return None
+                    
+                    inicio_chunk = time.time()
+                    sucesso = await converter_texto_para_audio(parte, voz_escolhida, saida_temp)
+                    
+                    if sucesso:
+                        tempo_chunk = time.time() - inicio_chunk
+                        print(f"✅ Parte {i}/{total_partes} | Tentativa {tentativa}/{MAX_TENTATIVAS} | Tempo: {tempo_chunk:.1f}s")
+                        return True
+                    else:
+                        print(f"🔄 Tentativa {tentativa}/{MAX_TENTATIVAS} falhou para parte {i}. Reiniciando...")
+                        tentativa += 1
+                        await asyncio.sleep(2)  # Intervalo entre tentativas
                 
-                if sucesso:
-                    tempo_chunk = time.time() - inicio_chunk
-                    print(f"✅ Parte {i}/{total_partes} | Tempo: {tempo_chunk:.1f}s")
-                    return True
-                else:
-                    print(f"❌ Falha na parte {i}")
-                    return False
+                print(f"❌ Falha definitiva na parte {i} após {MAX_TENTATIVAS} tentativas")
+                return False
         
         tasks = [processar_chunk(i+1, p) for i, p in enumerate(partes)]
         results = await asyncio.gather(*tasks)
+        
+        # Verificar se todas as partes foram convertidas
+        if not all(results):
+            print("\n⚠️ Algumas partes falharam. Não é possível unificar.")
+            return
         
         if not CANCELAR_PROCESSAMENTO and any(results):
             print("\n🔄 Unificando arquivos...")
