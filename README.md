@@ -28,7 +28,7 @@ pip install -r requirements.txt
 touch arquivo_exemplo.txt
 ```
 
-### 5. Adicionar Arquivos
+### 5. Adicionar Arquivos PDF ou TXT para converter em voz
 1. Abra o app Arquivos do seu iPhone
 2. Navegue até "a-Shell" > "ConversorTTS-iOS"
 3. Segure o dedo nessa pasta e cole os arquivos pdfs ou txt que voce copiou de outra pasta
@@ -40,10 +40,10 @@ python TTS_IPHONE_03.py
 
 **Fluxo de Uso:**
 1. Selecione a opção 1 no menu
-2. Escolha seu arquivo (D=Pastas, M=Caminho manual)
-3. Selecione uma voz (1-3)
-4. Aguarde a conversão (⏱️ 1-5 minutos por página)
-5. Encontre o áudio em: `No Meu Iphone/a-Shell/`
+2. Escolha seu arquivo (Deve estar listado)
+6. Selecione uma voz (1-3)
+7. Aguarde a conversão (⏱️ normalmente de 1-5 minutos por página, mas pode demorar mais ou menos, dependendo do livro a ser convertido)
+8. Encontre o áudio em: `No Meu Iphone/a-Shell/`
 
 ## ❓ Ajuda Comum
 ```markdown
@@ -59,7 +59,6 @@ R: Digite `sair` durante qualquer operação
 
 ## 📄 Licença
 MIT License - Livre para uso e modificação
-```
 
-### Link de Download Direto para Usuários:
+## Link de Download Direto:
 `https://github.com/JonJonesBR/ConversorTTS-iOS/archive/refs/heads/main.zip`
