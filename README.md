@@ -56,7 +56,7 @@ python TTS_IPHONE_03.py
    
 3. Selecione uma voz (1-3)
    
-4. Aguarde a conversão (⏱️ normalmente de 1-5 minutos por página, mas pode demorar mais ou menos, dependendo do livro a ser convertido)
+4. Aguarde a conversão (⏱️ normalmente de 5-20 minuto, mas pode demorar mais ou menos, dependendo do livro a ser convertido)
 
 5. Encontre o áudio em: `No Meu Iphone/a-Shell/`
 
