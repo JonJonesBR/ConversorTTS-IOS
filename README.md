@@ -17,10 +17,10 @@ Conversor otimizado para iOS que transforma arquivos TXT/PDF em áudio MP3 usand
    curl -LO https://github.com/JonJonesBR/ConversorTTS-iOS/archive/refs/heads/main.zip
 ```
   ```bash
-   unzip main.zip
+   python -c "import zipfile; zipfile.ZipFile('main.zip', 'r').extractall()"
 ```
   ```bash
-   cd ConversorTTS-iOS-main
+   cd ConversorTTS-IOS-main
 ```
 
 ### 3. Instalar Dependências
