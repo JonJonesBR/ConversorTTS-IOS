@@ -38,7 +38,7 @@ pip install -r requirements.txt
 
 1. Abra o app Arquivos do seu iPhone
 
-2. Navegue até "a-Shell" > "ConversorTTS-iOS"
+2. Navegue até "a-Shell"
 
 3. Segure o dedo nessa pasta e cole os arquivos pdfs ou txt que voce copiou de outra pasta
 
